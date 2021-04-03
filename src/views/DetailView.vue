@@ -1,16 +1,43 @@
 <template>
-  <div>
-    <section>
-      <h2>{{ viewItems.data.title }}</h2>
+  <div class="detail-wrap">
+    <section class="detail-main">
+      <section>
+        <h2>{{ viewItems.data.title }}</h2>
+      </section>
+      <section>
+        {{ viewItems.data.contents }}
+      </section>
+      <section class="created_at">
+        created_at({{ viewItems.data.created_at.substr(0, 10) }})
+      </section>
     </section>
-    <section>
-      <div v-html="viewItems.data.contents"></div>
+
+    <div class="reply-nums">
+      답변
+      <span class="reply-nums-number">{{ viewItems.data.reply.length }}</span>
+    </div>
+
+    <section
+      class="detail-reply"
+      v-for="reply in viewItems.data.reply"
+      v-bind:key="reply"
+    >
+      <section>
+        <div class="reply-user-name">{{ reply.user.name }}</div>
+      </section>
+      <section>
+        {{ reply.contents }}
+      </section>
+      <section class="created_at">
+        created_at({{ reply.created_at.substr(0, 10) }})
+      </section>
     </section>
   </div>
 </template>
 
 <script>
   export default {
+    name: "DetailView",
     computed: {
       viewItems() {
         return this.$store.state.view;
@@ -23,4 +50,70 @@
   };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+  .detail-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .detail-main {
+    margin-top: 4em;
+    border: 1px solid #34d376;
+    border-radius: 5px;
+    padding: 1.5em 2em;
+
+    section {
+      margin: 1em 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      h2 {
+        margin: 0;
+      }
+    }
+  }
+
+  .created_at {
+    color: gray;
+  }
+
+  .reply-nums {
+    margin: 2em 0 0.5em;
+
+    .reply-nums-number {
+      color: #34d376;
+      font-weight: bold;
+    }
+  }
+
+  .detail-reply {
+    margin-bottom: 1.5em;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    padding: 1.5em 2em;
+
+    section {
+      margin: 1em 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .reply-user-name {
+      color: gray;
+      border-bottom: 1px solid #dddddd;
+      padding-bottom: 0.5em;
+    }
+  }
+</style>

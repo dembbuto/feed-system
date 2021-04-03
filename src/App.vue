@@ -2,7 +2,7 @@
   <div id="app">
     <top-title></top-title>
     <transition name="page">
-      <router-view></router-view>
+      <router-view class=""></router-view>
     </transition>
     <spinner :loading="loadingStatus"></spinner>
   </div>
@@ -42,3 +42,9 @@
     },
   };
 </script>
+
+<style lang="scss">
+  body {
+    margin: 0;
+  }
+</style>
