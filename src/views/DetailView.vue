@@ -2,7 +2,7 @@
   <div class="detail-wrap">
     <section class="detail-main">
       <section>
-        <h2>{{ viewItems.data.title }}</h2>
+        <h2>{{ viewItems.data.title || "" }}</h2>
       </section>
       <section>
         {{ viewItems.data.contents }}
@@ -20,7 +20,7 @@
     <section
       class="detail-reply"
       v-for="reply in viewItems.data.reply"
-      v-bind:key="reply"
+      v-bind:key="reply.id"
     >
       <section>
         <div class="reply-user-name">{{ reply.user.name }}</div>

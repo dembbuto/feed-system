@@ -8,14 +8,14 @@ Vue.config.productionTip = false;
 
 // baseURL 기본값을 정의한다
 axios.defaults.baseURL = "https://problem.comento.kr";
-axios.defaults.paramsSerializer = function (paramObj) {
-  const params = new URLSearchParams();
-  for (const key in paramObj) {
-    params.append(key, paramObj[key]);
-  }
+// axios.defaults.paramsSerializer = function (paramObj) {
+//   const params = new URLSearchParams();
+//   for (const key in paramObj) {
+//     params.append(key, paramObj[key]);
+//   }
 
-  return params.toString();
-};
+//   return params.toString();
+// };
 
 new Vue({
   render: (h) => h(App),

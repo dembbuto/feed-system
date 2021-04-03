@@ -1,4 +1,5 @@
 import axios from "axios";
+// import qs from "qs";
 
 function fetchList() {
   return axios.get("/api/list", {
@@ -8,6 +9,9 @@ function fetchList() {
       category: [1, 2, 3],
       limit: 10,
     },
+    // paramsSerializer: (params) => {
+    //   return qs.stringify(params, { arrayFormat: "repeat" });
+    // },
   });
 }
 
