@@ -51,17 +51,57 @@
 </script>
 
 <style lang="scss" scoped>
-  .detail-wrap {
-    max-width: 1200px;
-    margin: 0 auto;
+  @include mobile {
+    .detail-wrap {
+      padding: 0 1em;
+    }
+
+    .detail-main {
+      margin-top: 2em;
+      border: 1px solid #34d376;
+      border-left: 0;
+      border-right: 0;
+      padding: 1.5em 0;
+      word-break: break-all;
+    }
+
+    .detail-reply {
+      border: 1px solid #dddddd;
+      border-left: 0;
+      border-right: 0;
+      padding: 1.2em 0;
+      word-break: break-all;
+    }
+
+    .top-tile-common {
+      display: none;
+    }
+
+    .top-tile-m-detail {
+      display: block;
+    }
+  }
+  @include desktop {
+    .detail-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .detail-main {
+      margin-top: 4em;
+      border: 1px solid #34d376;
+      border-radius: 5px;
+      padding: 1.5em 2em;
+    }
+
+    .detail-reply {
+      padding: 1.2em 2em;
+      border: 1px solid #dddddd;
+      border-radius: 5px;
+    }
   }
 
   .detail-main {
-    margin-top: 4em;
-    border: 1px solid #34d376;
-    border-radius: 5px;
-    padding: 1.5em 2em;
-
     section {
       margin: 1em 0;
 
@@ -94,9 +134,6 @@
 
   .detail-reply {
     margin-bottom: 1.5em;
-    border: 1px solid #dddddd;
-    border-radius: 5px;
-    padding: 1.5em 2em;
 
     section {
       margin: 1em 0;

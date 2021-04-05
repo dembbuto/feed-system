@@ -1,13 +1,13 @@
 import axios from "axios";
 // import qs from "qs";
 
-function fetchList() {
+function fetchList(listParams) {
   return axios.get("/api/list", {
     params: {
-      page: 1,
-      ord: "asc",
-      category: [1, 2, 3],
-      limit: 10,
+      page: listParams.page || 1,
+      ord: listParams.ord || "asc",
+      category: listParams.category || [1, 2, 3],
+      limit: listParams.limit || 10,
     },
     // paramsSerializer: (params) => {
     //   return qs.stringify(params, { arrayFormat: "repeat" });

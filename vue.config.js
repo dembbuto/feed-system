@@ -2,7 +2,7 @@ module.exports = {
   lintOnSave: false,
   css: {
     loaderOptions: {
-      sass: {
+      scss: {
         additionalData: `@import "@/assets/scss/common.scss";`,
       },
     },

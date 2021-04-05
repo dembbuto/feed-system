@@ -12,9 +12,9 @@ export const store = new Vuex.Store({
     view: {},
   },
   actions: {
-    async FETCH_LIST({ commit }) {
+    async FETCH_LIST({ commit }, params) {
       try {
-        const response = await fetchList();
+        const response = await fetchList(params);
         commit("SET_LIST", response.data);
         return response;
       } catch (error) {
