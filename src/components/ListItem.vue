@@ -85,20 +85,23 @@
     </div>
 
     <!-- 컴포넌트 MyModal -->
-    <MyModal @close="closeModal" v-if="modal">
+    <MyModal @close="closeModalNoChange" v-if="modal">
       <h2><b>필터</b></h2>
       <div>
         <p
           class="category-chkbox-wrap"
           v-for="(category, index) in categoryNames.category"
+          :key="index"
         >
-          <input
-            class="category-chkbox"
-            type="checkbox"
-            v-model="listParams.category"
-            :value="index + 1"
-          />
-          {{ category.name }}
+          <label class="category-chkbox-label">
+            <input
+              class="category-chkbox"
+              type="checkbox"
+              v-model="listParams.category"
+              :value="index + 1"
+            />
+            {{ category.name }}</label
+          >
         </p>
       </div>
       <template slot="footer">
@@ -125,6 +128,7 @@
           limit: 10,
         },
         modal: false,
+        categoryOri: [],
       };
     },
     computed: {
@@ -139,6 +143,28 @@
       },
     },
     created() {
+      this.$store
+        .dispatch("FETCH_LIST", this.listParams)
+        .then(() => {
+          let j = 0;
+          let k = 0;
+          for (
+            let i = 0;
+            i < this.listItems.data.length + this.adsItems.data.length;
+            i++
+          ) {
+            if (i % 4 != 3) {
+              this.alldata[i] = this.listItems.data[j];
+              j++;
+            } else {
+              this.alldata[i] = this.adsItems.data[k];
+              k++;
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       this.$store.dispatch("FETCH_CATEGORY");
       this.$store.dispatch("FETCH_ADS");
     },
@@ -149,9 +175,14 @@
       },
       openModal() {
         this.modal = true;
+        this.categoryOri = this.listParams.category;
       },
       closeModal() {
         this.modal = false;
+      },
+      closeModalNoChange() {
+        this.modal = false;
+        this.listParams.category = this.categoryOri; // 저장하지 않고 나가면 적용 x + checked 상태 원래대로
       },
       doSend() {
         if (this.listParams.category.length > 0) {
@@ -179,23 +210,6 @@
           });
       },
     },
-    // mounted() {
-    //   let j = 0;
-    //   let k = 0;
-    //   for (
-    //     let i = 0;
-    //     i < this.listItems.data.length + this.adsItems.data.length;
-    //     i++
-    //   ) {
-    //     if (i % 4 != 3) {
-    //       this.alldata[i] = this.listItems.data[j];
-    //       j++;
-    //     } else {
-    //       this.alldata[i] = this.adsItems.data[k];
-    //       k++;
-    //     }
-    //   }
-    // },
   };
 </script>
 
@@ -413,6 +427,10 @@
 
   .category-chkbox-wrap {
     font-size: 20px;
+
+    .category-chkbox-label {
+      cursor: pointer;
+    }
 
     .category-chkbox {
       width: 20px;

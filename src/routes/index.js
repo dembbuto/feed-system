@@ -2,8 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import ListView from "../views/ListView.vue";
 import DetailView from "../views/DetailView.vue";
-import bus from "../utils/bus.js";
-import { store } from "../store/index.js";
+// import bus from "../utils/bus.js";
+// import { store } from "../store/index.js";
 
 Vue.use(VueRouter);
 
@@ -20,17 +20,17 @@ export const router = new VueRouter({
       name: "list",
       // component: url 주소로 갔을 때 표시될 컴포넌트
       component: ListView,
-      beforeEnter: (to, from, next) => {
-        bus.$emit("start:spinner");
-        store
-          .dispatch("FETCH_LIST", to.name)
-          .then(() => {
-            next();
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      },
+      // beforeEnter: (to, from, next) => {
+      //   bus.$emit("start:spinner");
+      //   store
+      //     .dispatch("FETCH_LIST", to.name)
+      //     .then(() => {
+      //       next();
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
+      // },
     },
     {
       path: "/detail/:id",
