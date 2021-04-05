@@ -54,6 +54,10 @@
             </section>
           </router-link>
         </li>
+        <infinite-loading
+          @infinite="infiniteHandler"
+          spinner="waveDots"
+        ></infinite-loading>
         <li v-for="ads in adsItems.data" class="ads">
           <div>
             <div class="sponsored">
@@ -106,10 +110,11 @@
 
 <script>
   import MyModal from "../components/MyModal.vue";
+  import InfiniteLoading from "vue-infinite-loading";
 
   export default {
     name: "ListItem",
-    components: { MyModal },
+    components: { MyModal, InfiniteLoading },
     data() {
       return {
         alldata: [],
@@ -155,6 +160,23 @@
         } else {
           alert("최소 하나 이상의 카테고리를 선택해주세요.");
         }
+      },
+      infiniteHandler($state) {
+        this.$store
+          .dispatch("FETCH_LIST", this.listParams)
+          .then((loadState) => {
+            setTimeout(() => {
+              if (loadState) {
+                this.listParams.limit += 10;
+                $state.loaded();
+              } else {
+                $state.complete();
+              }
+            }, 1000);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       },
     },
     // mounted() {
@@ -312,7 +334,7 @@
 
         .user_id_created_at {
           color: gray;
-          padding-top: 0.5em;
+          padding-top: 0.75em;
 
           .user_id {
             color: #34d376;
