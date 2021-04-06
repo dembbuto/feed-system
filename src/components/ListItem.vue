@@ -120,7 +120,7 @@
     components: { MyModal, InfiniteLoading },
     data() {
       return {
-        alldata: [],
+        allData: [],
         listParams: {
           page: 1,
           ord: "asc",
@@ -143,6 +143,7 @@
       },
     },
     created() {
+      this.$store.dispatch("FETCH_CATEGORY");
       this.$store
         .dispatch("FETCH_LIST", this.listParams)
         .then(() => {
@@ -154,10 +155,10 @@
             i++
           ) {
             if (i % 4 != 3) {
-              this.alldata[i] = this.listItems.data[j];
+              this.allData[i] = this.listItems.data[j];
               j++;
             } else {
-              this.alldata[i] = this.adsItems.data[k];
+              this.allData[i] = this.adsItems.data[k];
               k++;
             }
           }
@@ -165,7 +166,6 @@
         .catch((error) => {
           console.log(error);
         });
-      this.$store.dispatch("FETCH_CATEGORY");
       this.$store.dispatch("FETCH_ADS");
     },
     methods: {

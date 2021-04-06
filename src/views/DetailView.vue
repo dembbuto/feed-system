@@ -2,24 +2,24 @@
   <div class="detail-wrap">
     <section class="detail-main">
       <section>
-        <h2>{{ viewItems.data.title || "" }}</h2>
+        <h2>{{ viewItems.title || "" }}</h2>
       </section>
       <section>
-        {{ viewItems.data.contents }}
+        {{ viewItems.contents }}
       </section>
       <section class="created_at">
-        created_at({{ viewItems.data.created_at.substr(0, 10) }})
+        created_at({{ viewItems.created_at.substr(0, 10) }})
       </section>
     </section>
 
     <div class="reply-nums">
       답변
-      <span class="reply-nums-number">{{ viewItems.data.reply.length }}</span>
+      <span class="reply-nums-number">{{ viewItems.reply.length }}</span>
     </div>
 
     <section
       class="detail-reply"
-      v-for="reply in viewItems.data.reply"
+      v-for="reply in viewItems.reply"
       v-bind:key="reply.id"
     >
       <section>
@@ -40,7 +40,7 @@
     name: "DetailView",
     computed: {
       viewItems() {
-        return this.$store.state.view;
+        return this.$store.state.view.data;
       },
     },
     created() {

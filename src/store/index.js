@@ -43,6 +43,7 @@ export const store = new Vuex.Store({
       try {
         const response = await fetchView(id);
         commit("SET_VIEW", response.data);
+        return response;
       } catch (error) {
         console.log(error);
       }

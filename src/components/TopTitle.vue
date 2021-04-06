@@ -2,7 +2,7 @@
   <div class="header_wrap">
     <div class="header">
       <router-link to="/">
-        <span class="top-tile-common">[2021-04-06] 방재식</span
+        <span class="top-tile-common">[2021-04-07] 방재식</span
         ><span class="top-tile-m-detail"> &lt; </span>
       </router-link>
     </div>
