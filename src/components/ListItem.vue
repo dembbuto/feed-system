@@ -255,6 +255,10 @@
       display: none;
     }
 
+    .list-wrap {
+      user-select: none;
+    }
+
     .right-content {
       margin-top: 1em;
 
@@ -267,8 +271,7 @@
       background-color: #edeef0;
     }
 
-    .feed,
-    .ads {
+    .feed {
       margin-bottom: 0.5em;
       background-color: white;
       border: 1px solid #dddddd;
@@ -302,6 +305,7 @@
       display: flex;
       max-width: 1200px;
       margin: 0 auto;
+      user-select: none;
     }
 
     .right-content {
@@ -309,8 +313,7 @@
       width: 976px;
     }
 
-    .feed,
-    .ads {
+    .feed {
       margin-bottom: 1.5em;
       border: 1px solid #dddddd;
       border-radius: 5px;

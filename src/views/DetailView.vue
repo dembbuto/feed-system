@@ -54,6 +54,7 @@
   @include mobile {
     .detail-wrap {
       padding: 0 1em;
+      user-select: none;
     }
 
     .detail-main {
@@ -85,6 +86,7 @@
     .detail-wrap {
       max-width: 1200px;
       margin: 0 auto;
+      user-select: none;
     }
 
     .detail-main {
