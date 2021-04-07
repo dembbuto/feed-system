@@ -28,6 +28,14 @@
           >
         </div>
         <div>
+          <span v-if="categoryNames.category">
+            <span
+              class="checked-category"
+              v-for="checked_cat in listParams.category"
+              :key="checked_cat"
+              >{{ categoryNames.category[checked_cat - 1].name }}</span
+            >
+          </span>
           <button type="button" class="btn-filter" @click="openModal">
             필터
           </button>
@@ -37,7 +45,9 @@
         <li v-for="(item, index) in allData" :key="index" class="feed">
           <router-link :to="`detail/${item.id}`" v-if="index % 4 != 3">
             <section class="category_name_feed_id">
-              <div>{{ categoryNames.category[item.category_id - 1].name }}</div>
+              <div v-if="item.category_id">
+                {{ categoryNames.category[item.category_id - 1].name }}
+              </div>
               <div>{{ item.id }}</div>
             </section>
             <section class="user_id_created_at">
@@ -149,6 +159,7 @@
       },
     },
     created() {
+      this.$store.dispatch("FETCH_CATEGORY");
       this.refreshAllData();
 
       window.addEventListener("scroll", this.handleScroll);
@@ -158,7 +169,10 @@
     },
     methods: {
       handleScroll() {
-        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        if (
+          window.innerHeight + window.pageYOffset >=
+          document.body.offsetHeight
+        ) {
           if (this.listParams.limit < this.$store.state.list.total) {
             this.listParams.limit += 10;
             this.refreshAllData();
@@ -183,12 +197,10 @@
         }
       },
       refreshAllData() {
-        this.$store.dispatch("FETCH_CATEGORY").then(() => {
-          this.$store.dispatch("FETCH_LIST", this.listParams).then(() => {
-            this.adsParams.limit = Math.floor(this.listParams.limit / 3);
-            this.$store.dispatch("FETCH_ADS", this.adsParams).then(() => {
-              this.fetchAllData();
-            });
+        this.$store.dispatch("FETCH_LIST", this.listParams).then(() => {
+          this.adsParams.limit = Math.floor(this.listParams.limit / 3);
+          this.$store.dispatch("FETCH_ADS", this.adsParams).then(() => {
+            this.fetchAllData();
           });
         });
       },
@@ -209,6 +221,8 @@
       },
       doSend() {
         if (this.listParams.category.length > 0) {
+          this.listParams.limit = 10;
+          this.allData.splice(0);
           this.refreshAllData();
           this.closeModal();
         } else {
@@ -332,12 +346,23 @@
     border: 1px solid gray;
     border-radius: 3px;
     cursor: pointer;
+    margin-left: 0.5em;
   }
 
   .right-content {
     .list-top-toolbar {
       display: flex;
       justify-content: space-between;
+
+      .checked-category {
+        margin: 0 0.5em;
+        padding: 0.5em;
+        border: 1px solid gray;
+        background-color: gray;
+        border-radius: 3px;
+        color: white;
+        font-size: 0.5em;
+      }
     }
 
     .feed-list {
