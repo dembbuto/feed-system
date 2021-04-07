@@ -19,9 +19,9 @@ function fetchCategory() {
   return axios.get("/api/category");
 }
 
-function fetchAds() {
+function fetchAds(adsParams) {
   return axios.get("/api/ads", {
-    params: { page: 1, limit: 10 },
+    params: { page: adsParams.page || 1, limit: adsParams.limit || 3 },
   });
 }
 

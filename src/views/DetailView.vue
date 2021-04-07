@@ -1,8 +1,8 @@
 <template>
-  <div class="detail-wrap">
+  <div class="detail-wrap" v-if="viewItems">
     <section class="detail-main">
       <section>
-        <h2>{{ viewItems.title || "" }}</h2>
+        <h2>{{ viewItems.title }}</h2>
       </section>
       <section>
         {{ viewItems.contents }}

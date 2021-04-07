@@ -33,9 +33,9 @@
           </button>
         </div>
       </div>
-      <ul class="feed-list">
-        <li v-for="item in listItems.data" class="feed">
-          <router-link :to="`detail/${item.id}`">
+      <ul class="feed-list" v-if="allData.length > 0">
+        <li v-for="(item, index) in allData" :key="index" class="feed">
+          <router-link :to="`detail/${item.id}`" v-if="index % 4 != 3">
             <section class="category_name_feed_id">
               <div>{{ categoryNames.category[item.category_id - 1].name }}</div>
               <div>{{ item.id }}</div>
@@ -47,45 +47,47 @@
               >
             </section>
             <section class="feed-title">
-              <h2 class="singleline-ellipsis">{{ item.title }}</h2>
+              <h2 class="singleline-ellipsis">
+                {{ item.title }}
+              </h2>
             </section>
             <section class="feed-contents singleline-ellipsis">
               {{ item.contents }}
             </section>
           </router-link>
-        </li>
-        <infinite-loading
-          @infinite="infiniteHandler"
-          spinner="waveDots"
-        ></infinite-loading>
-        <li v-for="ads in adsItems.data" class="ads">
-          <div>
+          <div v-else>
             <div class="sponsored">
               <div>sponsored</div>
             </div>
             <div class="ads-photo_ads-title">
               <div class="ads-photo">
                 <img
-                  :src="`https://cdn.comento.kr/assignment/${ads.img}`"
+                  :src="`https://cdn.comento.kr/assignment/${item.img}`"
                   alt="ads-photo"
+                  v-if="item.img"
                 />
               </div>
               <div class="ads-text">
                 <section class="ads-title">
-                  <h2 class="multiline-ellipsis_t">{{ ads.title }}</h2>
+                  <h2 class="multiline-ellipsis_t">
+                    {{ item.title }}
+                  </h2>
                 </section>
                 <section class="ads-contents multiline-ellipsis_c">
-                  {{ ads.contents }}
+                  {{ item.contents }}
                 </section>
               </div>
             </div>
           </div>
         </li>
+        <!-- <infinite-loading
+          @infinite="infiniteHandler"
+          spinner="waveDots"
+        ></infinite-loading> -->
       </ul>
     </div>
 
-    <!-- 컴포넌트 MyModal -->
-    <MyModal @close="closeModalNoChange" v-if="modal">
+    <my-modal @close="closeModalNoChange" v-if="modal">
       <h2><b>필터</b></h2>
       <div>
         <p
@@ -107,17 +109,17 @@
       <template slot="footer">
         <button class="btn-filter-save" @click="doSend">저장하기</button>
       </template>
-    </MyModal>
+    </my-modal>
   </div>
 </template>
 
 <script>
   import MyModal from "../components/MyModal.vue";
-  import InfiniteLoading from "vue-infinite-loading";
+  // import InfiniteLoading from "vue-infinite-loading";
 
   export default {
     name: "ListItem",
-    components: { MyModal, InfiniteLoading },
+    components: { MyModal },
     data() {
       return {
         allData: [],
@@ -126,6 +128,10 @@
           ord: "asc",
           category: [1, 2, 3],
           limit: 10,
+        },
+        adsParams: {
+          page: 1,
+          limit: 3,
         },
         modal: false,
         categoryOri: [],
@@ -143,35 +149,52 @@
       },
     },
     created() {
-      this.$store.dispatch("FETCH_CATEGORY");
-      this.$store
-        .dispatch("FETCH_LIST", this.listParams)
-        .then(() => {
-          let j = 0;
-          let k = 0;
-          for (
-            let i = 0;
-            i < this.listItems.data.length + this.adsItems.data.length;
-            i++
-          ) {
-            if (i % 4 != 3) {
-              this.allData[i] = this.listItems.data[j];
+      this.refreshAllData();
+
+      window.addEventListener("scroll", this.handleScroll);
+    },
+    destroyed() {
+      window.removeEventListener("scroll", this.handleScroll);
+    },
+    methods: {
+      handleScroll() {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          if (this.listParams.limit < this.$store.state.list.total) {
+            this.listParams.limit += 10;
+            this.refreshAllData();
+          }
+        }
+      },
+      fetchAllData() {
+        let j = 0;
+        let k = 0;
+        for (let i = 0; i < this.listParams.limit + this.adsParams.limit; i++) {
+          if (i % 4 != 3) {
+            if (this.$store.state.list.data[j] !== undefined) {
+              this.allData.splice(i, 1, this.$store.state.list.data[j]);
               j++;
-            } else {
-              this.allData[i] = this.adsItems.data[k];
+            }
+          } else {
+            if (this.$store.state.ads.data[k] !== undefined) {
+              this.allData.splice(i, 1, this.$store.state.ads.data[k]);
               k++;
             }
           }
-        })
-        .catch((error) => {
-          console.log(error);
+        }
+      },
+      refreshAllData() {
+        this.$store.dispatch("FETCH_CATEGORY").then(() => {
+          this.$store.dispatch("FETCH_LIST", this.listParams).then(() => {
+            this.adsParams.limit = Math.floor(this.listParams.limit / 3);
+            this.$store.dispatch("FETCH_ADS", this.adsParams).then(() => {
+              this.fetchAllData();
+            });
+          });
         });
-      this.$store.dispatch("FETCH_ADS");
-    },
-    methods: {
+      },
       changeOrd(params) {
         this.listParams.ord = params;
-        this.$store.dispatch("FETCH_LIST", this.listParams);
+        this.refreshAllData();
       },
       openModal() {
         this.modal = true;
@@ -186,28 +209,11 @@
       },
       doSend() {
         if (this.listParams.category.length > 0) {
-          this.$store.dispatch("FETCH_LIST", this.listParams);
+          this.refreshAllData();
           this.closeModal();
         } else {
           alert("최소 하나 이상의 카테고리를 선택해주세요.");
         }
-      },
-      infiniteHandler($state) {
-        this.$store
-          .dispatch("FETCH_LIST", this.listParams)
-          .then((loadState) => {
-            setTimeout(() => {
-              if (loadState) {
-                this.listParams.limit += 10;
-                $state.loaded();
-              } else {
-                $state.complete();
-              }
-            }, 1000);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
       },
     },
   };

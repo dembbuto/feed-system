@@ -30,9 +30,9 @@ export const store = new Vuex.Store({
         console.log(error);
       }
     },
-    async FETCH_ADS({ commit }) {
+    async FETCH_ADS({ commit }, params) {
       try {
-        const response = await fetchAds();
+        const response = await fetchAds(params);
         commit("SET_ADS", response.data);
         return response;
       } catch (error) {
