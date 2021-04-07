@@ -33,12 +33,14 @@
 
     &-window {
       background: #fff;
-      border-radius: 4px;
       overflow: hidden;
     }
 
     &-content {
       padding: 10px 10px 30px 30px;
+      @include desktop {
+        width: 500px;
+      }
     }
 
     &-footer {

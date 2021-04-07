@@ -182,9 +182,18 @@
       fetchAllData() {
         let j = 0;
         let k = 0;
+        if (this.listParams.limit > this.listItems.total) {
+          this.listParams.limit = this.listItems.total;
+          this.adsParams.limit = Math.floor(this.listParams.limit / 3);
+        }
         for (let i = 0; i < this.listParams.limit + this.adsParams.limit; i++) {
           if (i % 4 != 3) {
-            if (this.$store.state.list.data[j] !== undefined) {
+            if (
+              this.$store.state.list.data[j] !== undefined &&
+              this.listParams.category.includes(
+                this.$store.state.list.data[j].category_id
+              )
+            ) {
               this.allData.splice(i, 1, this.$store.state.list.data[j]);
               j++;
             }
@@ -336,7 +345,12 @@
   }
 
   .btn-filter-save {
-    padding: 0.6em 100px;
+    @include mobile {
+      padding: 0.6em 90px;
+    }
+    @include desktop {
+      padding: 0.6em 30px;
+    }
   }
 
   .btn-filter {
@@ -355,7 +369,7 @@
       justify-content: space-between;
 
       .checked-category {
-        margin: 0 0.5em;
+        margin: 0 0.25em;
         padding: 0.5em;
         border: 1px solid gray;
         background-color: gray;
@@ -392,11 +406,9 @@
         }
       }
 
-      .ads {
-        .sponsored {
-          color: gray;
-          padding-bottom: 0.5em;
-        }
+      .sponsored {
+        color: gray;
+        padding-bottom: 1em;
       }
 
       .singleline-ellipsis {
@@ -437,6 +449,7 @@
       margin-right: 0.5em;
       cursor: pointer;
       color: gray;
+      font-size: 0.9em;
 
       .circle-dot {
         background-color: gray;
