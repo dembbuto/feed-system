@@ -20,7 +20,7 @@
 <style lang="scss" scoped>
   .lds-facebook {
     display: inline-block;
-    position: absolute;
+    position: fixed;
     width: 64px;
     height: 64px;
     top: 47%;

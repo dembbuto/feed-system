@@ -125,6 +125,7 @@
 
 <script>
   import MyModal from "../components/MyModal.vue";
+  import bus from "../utils/bus.js";
   // import InfiniteLoading from "vue-infinite-loading";
 
   export default {
@@ -204,8 +205,10 @@
             }
           }
         }
+        bus.$emit("end:spinner");
       },
       refreshAllData() {
+        bus.$emit("start:spinner");
         this.$store.dispatch("FETCH_LIST", this.listParams).then(() => {
           this.adsParams.limit = Math.floor(this.listParams.limit / 3);
           this.$store.dispatch("FETCH_ADS", this.adsParams).then(() => {
