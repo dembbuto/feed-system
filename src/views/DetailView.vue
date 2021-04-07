@@ -73,15 +73,8 @@
       padding: 1.2em 0;
       word-break: break-all;
     }
-
-    .top-tile-common {
-      display: none;
-    }
-
-    .top-tile-m-detail {
-      display: block;
-    }
   }
+
   @include desktop {
     .detail-wrap {
       max-width: 1200px;

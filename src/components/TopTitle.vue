@@ -2,8 +2,11 @@
   <div class="header_wrap">
     <div class="header">
       <router-link to="/">
-        <span class="top-tile-common">[2021-04-07] 방재식</span
-        ><span class="top-tile-m-detail"> &lt; </span>
+        <span class="top_title_common">[2021-04-07] 방재식</span>
+        <span class="top_title_m_detail" v-if="$route.path.includes('/detail')">
+          <b>＜</b>
+        </span>
+        <span class="top_title_m_detail" v-else>[2021-04-07] 방재식</span>
       </router-link>
     </div>
   </div>
@@ -30,7 +33,23 @@
     }
   }
 
-  .top-tile-m-detail {
-    display: none;
+  @include mobile {
+    .top_title_common {
+      display: none;
+    }
+
+    .top_title_m_detail {
+      display: block;
+    }
+  }
+
+  @include desktop {
+    .top_title_common {
+      display: block;
+    }
+
+    .top_title_m_detail {
+      display: none;
+    }
   }
 </style>
